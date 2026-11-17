@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}À propos - BiblioLearn{% endblock %}
+
+{% block content %}
+<h2>À propos de BiblioLearn</h2>
+<p>Plateforme de bibliothèque et de mini-cours développée pour l'ESMA Marrakech.</p>
+
+<h3>Équipe du projet</h3>
+<ul>
+    {% for membre in equipe %}
+    <li>{{ membre.nom }} : {{ membre.role }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+

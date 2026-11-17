@@ -1,14 +1,18 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="utf-8">
 <title>{% block title %}BiblioLearn{% endblock %}</title>
+<link rel="stylesheet" href="{% static 'pages/style.css' %}">
 </head>
 <body>
 <header>
 <h1>BiblioLearn</h1>
 <nav>
 <a href="{% url 'pages:accueil' %}">Accueil</a>
+<a href="{% url 'pages:a_propos' %}">À propos</a>
+<a href="{% url 'pages:contact' %}">Contact</a>
 </nav>
 </header>
 <main>
@@ -18,4 +22,4 @@
 <p>BiblioLearn · ESMA Marrakech</p>
 </footer>
 </body>
-</html> 
+</html>
