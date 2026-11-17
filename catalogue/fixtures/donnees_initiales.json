@@ -1,0 +1,130 @@
+[
+  {
+    "model": "catalogue.categorie",
+    "pk": 1,
+    "fields": {
+      "nom": "Informatique",
+      "description": "Programmation, bases de données, web."
+    }
+  },
+  {
+    "model": "catalogue.categorie",
+    "pk": 2,
+    "fields": {
+      "nom": "Mathématiques",
+      "description": "Algèbre, probabilités, statistiques."
+    }
+  },
+  {
+    "model": "catalogue.categorie",
+    "pk": 3,
+    "fields": {
+      "nom": "Langues et littérature",
+      "description": "Grammaire, histoire littéraire."
+    }
+  },
+  {
+    "model": "catalogue.ressource",
+    "pk": 1,
+    "fields": {
+      "titre": "Python pour tous",
+      "type_ressource": "livre",
+      "resume": "Initiation à Python pour les débutants.",
+      "annee": 2021,
+      "disponible": true,
+      "categorie": 1,
+      "date_ajout": "2026-11-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalogue.ressource",
+    "pk": 2,
+    "fields": {
+      "titre": "Apprendre Django pas à pas",
+      "type_ressource": "livre",
+      "resume": "Construire un site web avec Django.",
+      "annee": 2023,
+      "disponible": true,
+      "categorie": 1,
+      "date_ajout": "2026-11-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalogue.ressource",
+    "pk": 3,
+    "fields": {
+      "titre": "Introduction aux bases de données",
+      "type_ressource": "cours",
+      "resume": "Modèle relationnel et langage SQL.",
+      "annee": 2022,
+      "disponible": true,
+      "categorie": 1,
+      "date_ajout": "2026-11-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalogue.ressource",
+    "pk": 4,
+    "fields": {
+      "titre": "Algèbre linéaire",
+      "type_ressource": "livre",
+      "resume": "Espaces vectoriels et matrices.",
+      "annee": 2019,
+      "disponible": false,
+      "categorie": 2,
+      "date_ajout": "2026-11-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalogue.ressource",
+    "pk": 5,
+    "fields": {
+      "titre": "Probabilités et statistiques",
+      "type_ressource": "cours",
+      "resume": "Variables aléatoires et lois usuelles.",
+      "annee": 2020,
+      "disponible": true,
+      "categorie": 2,
+      "date_ajout": "2026-11-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalogue.ressource",
+    "pk": 6,
+    "fields": {
+      "titre": "Les graphes en pratique",
+      "type_ressource": "article",
+      "resume": "Parcours et plus courts chemins.",
+      "annee": 2024,
+      "disponible": true,
+      "categorie": 2,
+      "date_ajout": "2026-11-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalogue.ressource",
+    "pk": 7,
+    "fields": {
+      "titre": "Grammaire française",
+      "type_ressource": "livre",
+      "resume": "Les règles essentielles de la langue.",
+      "annee": 2018,
+      "disponible": true,
+      "categorie": 3,
+      "date_ajout": "2026-11-15T10:00:00Z"
+    }
+  },
+  {
+    "model": "catalogue.ressource",
+    "pk": 8,
+    "fields": {
+      "titre": "Histoire de la littérature arabe",
+      "type_ressource": "livre",
+      "resume": "Des origines à l'époque moderne.",
+      "annee": 2017,
+      "disponible": false,
+      "categorie": 3,
+      "date_ajout": "2026-11-15T10:00:00Z"
+    }
+  }
+]

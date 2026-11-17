@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from catalogue.models import Ressource
 from .forms import ContactForm
 
 
@@ -6,7 +7,7 @@ def accueil(request):
     contexte = {
         "nom_projet": "BiblioLearn",
         "modules": ["Catalogue", "Comptes et rôles", "Emprunts", "Mini-cours"],
-        "nb_ressources": 0,
+        "nb_ressources": Ressource.objects.count(),
     }
     return render(request, "pages/accueil.html", contexte)
 

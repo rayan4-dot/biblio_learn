@@ -112,3 +112,11 @@ footer {
     border-top: 1px solid #e2e8f0;
 }
 
+
+table { border-collapse: collapse; width: 100%; }
+th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+th { background: #f0f3f7; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px;
+background: #e6e9ee; font-size: 0.85em; }
+.badge-ok { background: #dff3e3; color: #1d6b32; }
+.badge-ko { background: #fbe3e3; color: #9b2222; }

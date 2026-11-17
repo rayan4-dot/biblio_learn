@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ ressource.titre }} - BiblioLearn{% endblock %}
+
+{% block content %}
+<h2>{{ ressource.titre }}</h2>
+
+<p>
+    <span class="badge">{{ ressource.get_type_ressource_display }}</span>
+    {% if ressource.disponible %}
+    <span class="badge badge-ok">Disponible</span>
+    {% else %}
+    <span class="badge badge-ko">Indisponible</span>
+    {% endif %}
+</p>
+
+<ul>
+    <li>Catégorie : {{ ressource.categorie.nom }}</li>
+    <li>Année : {{ ressource.annee|default:"non renseignée" }}</li>
+    <li>Ajoutée le {{ ressource.date_ajout|date:"d/m/Y" }}</li>
+</ul>
+
+<h3>Résumé</h3>
+<p>{{ ressource.resume|default:"Aucun résumé pour cette ressource." }}</p>
+
+<p><a href="{% url 'catalogue:liste' %}">Retour au catalogue</a></p>
+{% endblock %}

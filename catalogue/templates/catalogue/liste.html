@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Catalogue - BiblioLearn{% endblock %}
+
+{% block content %}
+<h2>Catalogue</h2>
+
+<p>{{ ressources|length }} ressource(s) trouvée(s).</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Type</th>
+            <th>Catégorie</th>
+            <th>Année</th>
+            <th>Disponibilité</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ressource in ressources %}
+        <tr>
+            <td><a href="{% url 'catalogue:detail' ressource.pk %}">{{ ressource.titre }}</a></td>
+            <td>{{ ressource.get_type_ressource_display }}</td>
+            <td>{{ ressource.categorie.nom }}</td>
+            <td>{{ ressource.annee|default:"-" }}</td>
+            <td>
+                {% if ressource.disponible %}
+                <span class="badge badge-ok">Disponible</span>
+                {% else %}
+                <span class="badge badge-ko">Indisponible</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">Aucune ressource pour le moment.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
