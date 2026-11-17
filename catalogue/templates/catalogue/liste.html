@@ -1,9 +1,16 @@
 {% extends "base.html" %}
 
-{% block title %}Catalogue - BiblioLearn{% endblock %}
+{% block title %}{% if categorie %}Catalogue : {{ categorie.nom }}{% else %}Catalogue{% endif %} - BiblioLearn{% endblock %}
 
 {% block content %}
-<h2>Catalogue</h2>
+<h2>{% if categorie %}Catalogue : {{ categorie.nom }}{% else %}Catalogue{% endif %}</h2>
+
+<p>
+    <a href="{% url 'catalogue:categories' %}">Parcourir par catégorie</a>
+    {% if categorie %}
+    | <a href="{% url 'catalogue:liste' %}">Voir tout le catalogue</a>
+    {% endif %}
+</p>
 
 <p>{{ ressources|length }} ressource(s) trouvée(s).</p>
 

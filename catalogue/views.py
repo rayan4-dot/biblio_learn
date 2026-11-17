@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, render
-from .models import Ressource
+from .models import Categorie, Ressource
 
 
 def liste(request):
@@ -20,3 +20,31 @@ def liste(request):
 def detail(request, pk):
     ressource = get_object_or_404(Ressource, pk=pk)
     return render(request, "catalogue/detail.html", {"ressource": ressource})
+
+
+def categories(request):
+    categories = Categorie.objects.all()
+    return render(
+        request,
+        "catalogue/categories.html",
+        {
+            "categories": categories,
+        },
+    )
+
+
+def par_categorie(request, pk):
+    categorie = get_object_or_404(Categorie, pk=pk)
+    ressources = categorie.ressources.all()
+    q = request.GET.get("q", "").strip()
+    if q:
+        ressources = ressources.filter(titre__icontains=q)
+    return render(
+        request,
+        "catalogue/liste.html",
+        {
+            "ressources": ressources,
+            "categorie": categorie,
+            "q": q,
+        },
+    )
