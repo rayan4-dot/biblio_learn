@@ -3,8 +3,18 @@ from .models import Ressource
 
 
 def liste(request):
+    q = request.GET.get("q", "").strip()
     ressources = Ressource.objects.select_related("categorie")
-    return render(request, "catalogue/liste.html", {"ressources": ressources})
+    if q:
+        ressources = ressources.filter(titre__icontains=q)
+    return render(
+        request,
+        "catalogue/liste.html",
+        {
+            "ressources": ressources,
+            "q": q,
+        },
+    )
 
 
 def detail(request, pk):

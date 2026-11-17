@@ -7,6 +7,11 @@
 
 <p>{{ ressources|length }} ressource(s) trouvée(s).</p>
 
+<form method="get" style="margin-bottom: 1rem;">
+    <input type="text" name="q" value="{{ q }}" placeholder="Rechercher par titre...">
+    <button type="submit">Rechercher</button>
+</form>
+
 <table>
     <thead>
         <tr>
