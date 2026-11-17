@@ -27,6 +27,7 @@ class Ressource(models.Model):
     )
     resume = models.TextField("Résumé", blank=True)
     annee = models.PositiveIntegerField("Année", null=True, blank=True)
+    nb_exemplaires = models.PositiveIntegerField("Nombre d'exemplaires", default=1)
     disponible = models.BooleanField("Disponible", default=True)
     date_ajout = models.DateTimeField("Date d'ajout", auto_now_add=True)
     categorie = models.ForeignKey(

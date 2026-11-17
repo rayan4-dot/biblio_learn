@@ -10,7 +10,7 @@ class CategorieAdmin(admin.ModelAdmin):
 
 @admin.register(Ressource)
 class RessourceAdmin(admin.ModelAdmin):
-    list_display = ("titre", "type_ressource", "categorie", "annee", "disponible")
+    list_display = ("titre", "type_ressource", "categorie", "annee", "nb_exemplaires", "disponible")
     list_filter = ("type_ressource", "categorie", "disponible")
     search_fields = ("titre", "resume")
     list_editable = ("disponible",)
