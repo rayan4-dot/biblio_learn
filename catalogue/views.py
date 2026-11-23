@@ -48,3 +48,13 @@ def par_categorie(request, pk):
             "q": q,
         },
     )
+
+
+def par_auteur(request, pk):
+    auteur = get_object_or_404(Auteur, pk=pk)
+    ressources = auteur.ressources.select_related("categorie")
+    return render(
+        request,
+        "catalogue/liste.html",
+        {"ressources": ressources, "auteur": auteur},
+    )

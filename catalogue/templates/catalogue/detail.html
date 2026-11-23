@@ -16,6 +16,14 @@
 
 <ul>
     <li>Catégorie : {{ ressource.categorie.nom }}</li>
+    <li>
+        Auteur(s) :
+        {% for a in ressource.auteurs.all %}
+        <a href="{% url 'catalogue:par_auteur' a.pk %}">{{ a }}</a>{% if not forloop.last %}, {% endif %}
+        {% empty %}
+        non renseigné
+        {% endfor %}
+    </li>
     <li>Année : {{ ressource.annee|default:"non renseignée" }}</li>
     <li>Nombre d'exemplaires : {{ ressource.nb_exemplaires }}</li>
     <li>Ajoutée le {{ ressource.date_ajout|date:"d/m/Y" }}</li>
