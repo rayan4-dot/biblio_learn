@@ -1,0 +1,47 @@
+[
+  {
+    "model": "catalogue.auteur",
+    "pk": 1,
+    "fields": {
+      "nom": "Amrani",
+      "prenom": "Salma",
+      "biographie": "Enseignante-chercheuse en informatique."
+    }
+  },
+  {
+    "model": "catalogue.auteur",
+    "pk": 2,
+    "fields": {
+      "nom": "Benali",
+      "prenom": "Karim",
+      "biographie": "Ingénieur logiciel et formateur en bases de données."
+    }
+  },
+  {
+    "model": "catalogue.auteur",
+    "pk": 3,
+    "fields": {
+      "nom": "El Idrissi",
+      "prenom": "Youssef",
+      "biographie": "Professeur de mathématiques appliquées."
+    }
+  },
+  {
+    "model": "catalogue.auteur",
+    "pk": 4,
+    "fields": {
+      "nom": "Tazi",
+      "prenom": "Nadia",
+      "biographie": "Statisticienne, spécialiste des graphes."
+    }
+  },
+  {
+    "model": "catalogue.auteur",
+    "pk": 5,
+    "fields": {
+      "nom": "Chraibi",
+      "prenom": "Omar",
+      "biographie": "Linguiste et historien de la littérature."
+    }
+  }
+]
