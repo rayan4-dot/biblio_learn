@@ -1,5 +1,5 @@
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, render
 from .models import Auteur, Categorie, Ressource
 
@@ -100,3 +100,8 @@ def categories(request):
     return render(
         request, "catalogue/categories.html", {"categories": Categorie.objects.all()}
     )
+
+
+def auteurs(request):
+    liste_auteurs = Auteur.objects.annotate(nb=Count("ressources"))
+    return render(request, "catalogue/auteurs.html", {"auteurs": liste_auteurs})
