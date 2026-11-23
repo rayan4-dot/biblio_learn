@@ -31,7 +31,7 @@
     <a href="{% url 'catalogue:liste' %}">Réinitialiser</a>
 </form>
 
-<p>{{ ressources|length }} ressource(s) trouvée(s).</p>
+<p>{{ page_obj.paginator.count }} ressource(s) trouvée(s).</p>
 
 <table>
     <thead>
@@ -45,7 +45,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for ressource in ressources %}
+        {% for ressource in page_obj %}
         <tr>
             <td><a href="{% url 'catalogue:detail' ressource.pk %}">{{ ressource.titre }}</a></td>
             <td>
@@ -73,4 +73,16 @@
         {% endfor %}
     </tbody>
 </table>
+
+{% if page_obj.has_other_pages %}
+<nav class="pagination">
+    {% if page_obj.has_previous %}
+    <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">&laquo; Précédent</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}">Suivant &raquo;</a>
+    {% endif %}
+</nav>
+{% endif %}
 {% endblock %}

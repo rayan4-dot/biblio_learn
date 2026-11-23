@@ -1,6 +1,18 @@
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 from .models import Auteur, Categorie, Ressource
+
+PAR_PAGE = 3
+
+
+def paginer(request, ressources):
+    """Découpe le QuerySet en pages et prépare les liens de navigation."""
+    paginator = Paginator(ressources, PAR_PAGE)
+    page_obj = paginator.get_page(request.GET.get("page"))
+    params = request.GET.copy()
+    params.pop("page", None)
+    return page_obj, params.urlencode()
 
 
 def liste(request):
@@ -23,8 +35,10 @@ def liste(request):
     if dispo:
         ressources = ressources.filter(disponible=True)
 
+    page_obj, querystring = paginer(request, ressources)
     contexte = {
-        "ressources": ressources,
+        "page_obj": page_obj,
+        "querystring": querystring,
         "types": Ressource.TYPE_CHOIX,
         "categories": Categorie.objects.all(),
         "filtres": {
@@ -47,8 +61,10 @@ def par_categorie(request, pk):
     ressources = categorie.ressources.select_related("categorie").prefetch_related(
         "auteurs"
     )
+    page_obj, querystring = paginer(request, ressources)
     contexte = {
-        "ressources": ressources,
+        "page_obj": page_obj,
+        "querystring": querystring,
         "types": Ressource.TYPE_CHOIX,
         "categories": Categorie.objects.all(),
         "filtres": {},
@@ -62,8 +78,10 @@ def par_auteur(request, pk):
     ressources = auteur.ressources.select_related("categorie").prefetch_related(
         "auteurs"
     )
+    page_obj, querystring = paginer(request, ressources)
     contexte = {
-        "ressources": ressources,
+        "page_obj": page_obj,
+        "querystring": querystring,
         "types": Ressource.TYPE_CHOIX,
         "categories": Categorie.objects.all(),
         "filtres": {},
