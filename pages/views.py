@@ -8,6 +8,7 @@ def accueil(request):
         "nom_projet": "BiblioLearn",
         "modules": ["Catalogue", "Comptes et rôles", "Emprunts", "Mini-cours"],
         "nb_ressources": Ressource.objects.count(),
+        "dernieres_parutions": Ressource.objects.order_by("-annee")[:3],
     }
     return render(request, "pages/accueil.html", contexte)
 
