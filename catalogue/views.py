@@ -23,6 +23,7 @@ def liste(request):
     type_choisi = request.GET.get("type", "")
     categorie_choisie = request.GET.get("categorie", "")
     dispo = request.GET.get("dispo") == "1"
+    tri = request.GET.get("tri", "")
 
     if q:
         ressources = ressources.filter(
@@ -35,6 +36,10 @@ def liste(request):
     if dispo:
         ressources = ressources.filter(disponible=True)
 
+    TRIS = {"titre": "titre", "recent": "-annee", "ancien": "annee"}
+    if tri in TRIS:
+        ressources = ressources.order_by(TRIS[tri])
+
     page_obj, querystring = paginer(request, ressources)
     contexte = {
         "page_obj": page_obj,
@@ -46,6 +51,7 @@ def liste(request):
             "type": type_choisi,
             "categorie": categorie_choisie,
             "dispo": dispo,
+            "tri": tri,
         },
     }
     return render(request, "catalogue/liste.html", contexte)

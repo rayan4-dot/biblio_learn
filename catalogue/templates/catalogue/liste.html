@@ -23,6 +23,12 @@
         <option value="{{ c.pk }}" {% if c.pk|stringformat:"s" == filtres.categorie %}selected{% endif %}>{{ c.nom }}</option>
         {% endfor %}
     </select>
+    <select name="tri">
+        <option value="">Tri par défaut</option>
+        <option value="titre" {% if filtres.tri == "titre" %}selected{% endif %}>Titre (A-Z)</option>
+        <option value="recent" {% if filtres.tri == "recent" %}selected{% endif %}>Plus récentes d'abord</option>
+        <option value="ancien" {% if filtres.tri == "ancien" %}selected{% endif %}>Plus anciennes d'abord</option>
+    </select>
     <label>
         <input type="checkbox" name="dispo" value="1" {% if filtres.dispo %}checked{% endif %}>
         Disponibles seulement
