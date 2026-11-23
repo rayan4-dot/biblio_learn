@@ -3,34 +3,75 @@
 {% block title %}{{ ressource.titre }} - BiblioLearn{% endblock %}
 
 {% block content %}
-<h2>{{ ressource.titre }}</h2>
+<div class="container">
+    <div style="margin-bottom: 1.5rem;">
+        <a href="{% url 'catalogue:liste' %}" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--slate-500); font-size: 0.9rem; font-weight: 500;">
+            &larr; Retour au catalogue complet
+        </a>
+    </div>
 
-<p>
-    <span class="badge">{{ ressource.get_type_ressource_display }}</span>
-    {% if ressource.disponible %}
-    <span class="badge badge-ok">Disponible</span>
-    {% else %}
-    <span class="badge badge-ko">Indisponible</span>
-    {% endif %}
-</p>
+    <div class="detail-layout-card">
+        <div class="detail-header-meta">
+            <span class="badge-type">{{ ressource.get_type_ressource_display }}</span>
+            {% if ressource.disponible %}
+            <span class="badge badge-ok">● Exemplaire disponible</span>
+            {% else %}
+            <span class="badge badge-ko">● Actuellement indisponible</span>
+            {% endif %}
+        </div>
 
-<ul>
-    <li>Catégorie : {{ ressource.categorie.nom }}</li>
-    <li>
-        Auteur(s) :
-        {% for a in ressource.auteurs.all %}
-        <a href="{% url 'catalogue:par_auteur' a.pk %}">{{ a }}</a>{% if not forloop.last %}, {% endif %}
-        {% empty %}
-        non renseigné
-        {% endfor %}
-    </li>
-    <li>Année : {{ ressource.annee|default:"non renseignée" }}</li>
-    <li>Nombre d'exemplaires : {{ ressource.nb_exemplaires }}</li>
-    <li>Ajoutée le {{ ressource.date_ajout|date:"d/m/Y" }}</li>
-</ul>
+        <h1 style="font-size: 2.2rem; color: var(--navy-950); margin: 0 0 1rem 0; line-height: 1.25;">
+            {{ ressource.titre }}
+        </h1>
 
-<h3>Résumé</h3>
-<p>{{ ressource.resume|default:"Aucun résumé pour cette ressource." }}</p>
+        <ul class="meta-spec-list">
+            <li class="meta-spec-item">
+                <span class="meta-spec-label">Discipline / Pôle</span>
+                <span class="meta-spec-value">
+                    <a href="{% url 'catalogue:par_categorie' ressource.categorie.pk %}">
+                        {{ ressource.categorie.nom }}
+                    </a>
+                </span>
+            </li>
+            <li class="meta-spec-item">
+                <span class="meta-spec-label">Corps professoral / Auteur(s)</span>
+                <span class="meta-spec-value">
+                    {% for a in ressource.auteurs.all %}
+                    <a href="{% url 'catalogue:par_auteur' a.pk %}">{{ a }}</a>{% if not forloop.last %}, {% endif %}
+                    {% empty %}
+                    <span style="color: var(--slate-400); font-weight: normal;">non renseigné</span>
+                    {% endfor %}
+                </span>
+            </li>
+            <li class="meta-spec-item">
+                <span class="meta-spec-label">Année d'édition</span>
+                <span class="meta-spec-value">{{ ressource.annee|default:"non renseignée" }}</span>
+            </li>
+            <li class="meta-spec-item">
+                <span class="meta-spec-label">Fonds documentaire</span>
+                <span class="meta-spec-value">{{ ressource.nb_exemplaires }} exemplaire(s)</span>
+            </li>
+            <li class="meta-spec-item">
+                <span class="meta-spec-label">Enregistré le</span>
+                <span class="meta-spec-value">{{ ressource.date_ajout|date:"d/m/Y" }}</span>
+            </li>
+        </ul>
 
-<p><a href="{% url 'catalogue:liste' %}">Retour au catalogue</a></p>
+        <h3 style="color: var(--navy-950); font-size: 1.3rem; margin-top: 2rem; margin-bottom: 0.75rem;">
+            Résumé & Objectifs Pédagogiques
+        </h3>
+        <div class="summary-box">
+            {{ ressource.resume|default:"Aucun résumé pour cette ressource." }}
+        </div>
+
+        <div style="margin-top: 2.5rem; display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+            <a href="{% url 'catalogue:liste' %}" class="btn-primary-luxury">
+                Retour au catalogue
+            </a>
+            <a href="{% url 'catalogue:par_categorie' ressource.categorie.pk %}" class="btn-outline-luxury" style="color: var(--navy-950); border-color: var(--slate-300);">
+                Autres ouvrages en {{ ressource.categorie.nom }}
+            </a>
+        </div>
+    </div>
+</div>
 {% endblock %}

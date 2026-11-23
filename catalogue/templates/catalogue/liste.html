@@ -1,94 +1,153 @@
 {% extends "base.html" %}
 
-{% block title %}Catalogue - BiblioLearn{% endblock %}
-
-{% block content %}
-<h2>
+{% block title %}
 {% if categorie %}Catalogue : {{ categorie.nom }}
 {% elif auteur %}Catalogue : {{ auteur }}
-{% else %}Catalogue{% endif %}
-</h2>
+{% else %}Catalogue des Ressources{% endif %} - BiblioLearn
+{% endblock %}
 
-<form method="get" action="{% url 'catalogue:liste' %}" class="filtres">
-    <input type="text" name="q" value="{{ filtres.q }}" placeholder="Titre ou nom d'auteur">
-    <select name="type">
-        <option value="">Tous les types</option>
-        {% for valeur, libelle in types %}
-        <option value="{{ valeur }}" {% if valeur == filtres.type %}selected{% endif %}>{{ libelle }}</option>
-        {% endfor %}
-    </select>
-    <select name="categorie">
-        <option value="">Toutes les catégories</option>
-        {% for c in categories %}
-        <option value="{{ c.pk }}" {% if c.pk|stringformat:"s" == filtres.categorie %}selected{% endif %}>{{ c.nom }}</option>
-        {% endfor %}
-    </select>
-    <select name="tri">
-        <option value="">Tri par défaut</option>
-        <option value="titre" {% if filtres.tri == "titre" %}selected{% endif %}>Titre (A-Z)</option>
-        <option value="recent" {% if filtres.tri == "recent" %}selected{% endif %}>Plus récentes d'abord</option>
-        <option value="ancien" {% if filtres.tri == "ancien" %}selected{% endif %}>Plus anciennes d'abord</option>
-    </select>
-    <label>
-        <input type="checkbox" name="dispo" value="1" {% if filtres.dispo %}checked{% endif %}>
-        Disponibles seulement
-    </label>
-    <button type="submit">Filtrer</button>
-    <a href="{% url 'catalogue:liste' %}">Réinitialiser</a>
-</form>
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <span class="section-pill">Fonds Documentaire</span>
+            <h1 class="page-title">
+                {% if categorie %}📁 {{ categorie.nom }}
+                {% elif auteur %}✍️ {{ auteur }}
+                {% else %}📚 Catalogue Général{% endif %}
+            </h1>
+            <p class="page-subtitle">
+                {% if categorie %}Tous les ouvrages et ressources indexés sous la discipline {{ categorie.nom }}.
+                {% elif auteur %}Bibliographie complète et publications universitaires de {{ auteur }}.
+                {% else %}Explorez, filtrez et consultez les ouvrages, cours et articles scientifiques disponibles.{% endif %}
+            </p>
+        </div>
+        <div>
+            {% if categorie or auteur %}
+            <a href="{% url 'catalogue:liste' %}" class="btn-primary-luxury" style="padding: 0.6rem 1.4rem; font-size: 0.88rem;">
+                &larr; Tout le catalogue
+            </a>
+            {% else %}
+            <a href="{% url 'catalogue:categories' %}" class="btn-primary-luxury" style="padding: 0.6rem 1.4rem; font-size: 0.88rem;">
+                Voir par Catégories
+            </a>
+            {% endif %}
+        </div>
+    </div>
 
-<p>{{ page_obj.paginator.count }} ressource(s) trouvée(s).</p>
+    <!-- Filtres Multicritères -->
+    <form method="get" action="{% url 'catalogue:liste' %}" class="filtres">
+        <input type="text" name="q" value="{{ filtres.q }}" placeholder="Rechercher par titre ou nom d'auteur...">
+        
+        <select name="type">
+            <option value="">Tous les types</option>
+            {% for valeur, libelle in types %}
+            <option value="{{ valeur }}" {% if valeur == filtres.type %}selected{% endif %}>{{ libelle }}</option>
+            {% endfor %}
+        </select>
+        
+        <select name="categorie">
+            <option value="">Toutes les catégories</option>
+            {% for c in categories %}
+            <option value="{{ c.pk }}" {% if c.pk|stringformat:"s" == filtres.categorie %}selected{% endif %}>{{ c.nom }}</option>
+            {% endfor %}
+        </select>
 
-<table>
-    <thead>
-        <tr>
-            <th>Titre</th>
-            <th>Auteurs</th>
-            <th>Type</th>
-            <th>Catégorie</th>
-            <th>Année</th>
-            <th>Disponibilité</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for ressource in page_obj %}
-        <tr>
-            <td><a href="{% url 'catalogue:detail' ressource.pk %}">{{ ressource.titre }}</a></td>
-            <td>
-                {% for a in ressource.auteurs.all %}
-                <a href="{% url 'catalogue:par_auteur' a.pk %}">{{ a }}</a>{% if not forloop.last %}, {% endif %}
+        <select name="tri">
+            <option value="">Tri par défaut</option>
+            <option value="titre" {% if filtres.tri == "titre" %}selected{% endif %}>Titre (A-Z)</option>
+            <option value="recent" {% if filtres.tri == "recent" %}selected{% endif %}>Plus récentes d'abord</option>
+            <option value="ancien" {% if filtres.tri == "ancien" %}selected{% endif %}>Plus anciennes d'abord</option>
+        </select>
+
+        <label>
+            <input type="checkbox" name="dispo" value="1" {% if filtres.dispo %}checked{% endif %}>
+            Disponibles seulement
+        </label>
+        
+        <button type="submit">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-right: 4px;">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            Filtrer
+        </button>
+        <a href="{% url 'catalogue:liste' %}">Réinitialiser</a>
+    </form>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+        <p style="margin: 0; font-weight: 600; color: var(--slate-700);">{{ page_obj.paginator.count }} ressource(s) trouvée(s).</p>
+        {% if page_obj.has_other_pages %}
+        <span style="font-size: 0.88rem; color: var(--slate-500);">
+            Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+        </span>
+        {% endif %}
+    </div>
+
+    <!-- Table des Ressources -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Auteurs</th>
+                    <th>Type</th>
+                    <th>Catégorie</th>
+                    <th>Année</th>
+                    <th>Disponibilité</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ressource in page_obj %}
+                <tr>
+                    <td>
+                        <a href="{% url 'catalogue:detail' ressource.pk %}">{{ ressource.titre }}</a>
+                    </td>
+                    <td>
+                        {% for a in ressource.auteurs.all %}
+                        <a href="{% url 'catalogue:par_auteur' a.pk %}">{{ a }}</a>{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                        -
+                        {% endfor %}
+                    </td>
+                    <td><span class="badge-type">{{ ressource.get_type_ressource_display }}</span></td>
+                    <td>
+                        <a href="{% url 'catalogue:par_categorie' ressource.categorie.pk %}" style="font-weight: 500; color: var(--primary-600);">
+                            {{ ressource.categorie.nom }}
+                        </a>
+                    </td>
+                    <td><strong>{{ ressource.annee|default:"-" }}</strong></td>
+                    <td>
+                        {% if ressource.disponible %}
+                        <span class="badge badge-ok">● Disponible</span>
+                        {% else %}
+                        <span class="badge badge-ko">● Indisponible</span>
+                        {% endif %}
+                    </td>
+                </tr>
                 {% empty %}
-                -
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 3rem 1rem; color: var(--slate-400);">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div>
+                        <strong>Aucune ressource pour le moment.</strong>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.88rem;">Essayez d'ajuster vos critères de recherche ou réinitialisez les filtres.</p>
+                    </td>
+                </tr>
                 {% endfor %}
-            </td>
-            <td>{{ ressource.get_type_ressource_display }}</td>
-            <td>{{ ressource.categorie.nom }}</td>
-            <td>{{ ressource.annee|default:"-" }}</td>
-            <td>
-                {% if ressource.disponible %}
-                <span class="badge badge-ok">Disponible</span>
-                {% else %}
-                <span class="badge badge-ko">Indisponible</span>
-                {% endif %}
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="6">Aucune ressource pour le moment.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+            </tbody>
+        </table>
+    </div>
 
-{% if page_obj.has_other_pages %}
-<nav class="pagination">
-    {% if page_obj.has_previous %}
-    <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">&laquo; Précédent</a>
+    <!-- Pagination -->
+    {% if page_obj.has_other_pages %}
+    <nav class="pagination">
+        {% if page_obj.has_previous %}
+        <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}">&laquo; Précédent</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+        <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}">Suivant &raquo;</a>
+        {% endif %}
+    </nav>
     {% endif %}
-    <span>Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}</span>
-    {% if page_obj.has_next %}
-    <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}">Suivant &raquo;</a>
-    {% endif %}
-</nav>
-{% endif %}
+</div>
 {% endblock %}

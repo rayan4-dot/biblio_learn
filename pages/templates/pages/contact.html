@@ -1,18 +1,36 @@
 {% extends "base.html" %}
 
-{% block title %}Contact - BiblioLearn{% endblock %}
+{% block title %}Contactez la Direction Documentaire - BiblioLearn{% endblock %}
 
 {% block content %}
-<h2>Contact</h2>
+<div class="container">
+    <div class="page-header" style="text-align: center; justify-content: center;">
+        <div style="text-align: center;">
+            <span class="section-pill">Assistance & Renseignements</span>
+            <h1 class="page-title" style="justify-content: center;">📬 Contactez le Service Documentaire</h1>
+            <p class="page-subtitle">Une question sur un ouvrage, un prêt ou un compte étudiant ? Nous vous répondons sous 24h.</p>
+        </div>
+    </div>
 
-{% if message_confirmation %}
-<p>{{ message_confirmation }}</p>
-{% endif %}
+    <div class="form-luxury-card">
+        {% if message_confirmation %}
+        <div style="background: var(--emerald-50); border: 1px solid rgba(5, 150, 105, 0.3); color: var(--emerald-600); padding: 1.25rem; border-radius: var(--radius-md); margin-bottom: 1.5rem; text-align: center; font-weight: 600;">
+            ✓ {{ message_confirmation }}
+        </div>
+        {% endif %}
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Envoyer</button>
-</form>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-primary-luxury" style="width: 100%; justify-content: center; margin-top: 1rem; border: none; cursor: pointer;">
+                <span>Transmettre mon message</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
+        </form>
+    </div>
+</div>
 {% endblock %}
 

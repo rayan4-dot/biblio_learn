@@ -2,26 +2,77 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="utf-8">
-<title>{% block title %}BiblioLearn{% endblock %}</title>
-<link rel="stylesheet" href="{% static 'pages/style.css' %}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}BiblioLearn - Bibliothèque Universitaire{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'pages/style.css' %}">
 </head>
 <body>
-<header>
-<h1>BiblioLearn</h1>
-<nav>
-<a href="{% url 'pages:accueil' %}">Accueil</a>
-<a href="{% url 'pages:a_propos' %}">À propos</a>
-<a href="{% url 'catalogue:liste' %}">Catalogue</a>
-<a href="{% url 'catalogue:auteurs' %}">Auteurs</a>
-<a href="{% url 'pages:contact' %}">Contact</a>
-</nav>
-</header>
-<main>
-{% block content %}{% endblock %}
-</main>
-<footer>
-<p>BiblioLearn · ESMA Marrakech</p>
-</footer>
+    <header>
+        <div class="header-container">
+            <a href="{% url 'pages:accueil' %}" class="brand-logo">
+                <div class="brand-icon">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                        <line x1="12" y1="6" x2="16" y2="6"></line>
+                        <line x1="12" y1="10" x2="16" y2="10"></line>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <span class="brand-title">Biblio<span>Learn</span></span>
+                    <span class="brand-subtitle">ESMA Marrakech</span>
+                </div>
+            </a>
+            <nav>
+                <a href="{% url 'pages:accueil' %}">Accueil</a>
+                <a href="{% url 'catalogue:liste' %}">Catalogue</a>
+                <a href="{% url 'catalogue:categories' %}">Catégories</a>
+                <a href="{% url 'catalogue:auteurs' %}">Auteurs</a>
+                <a href="{% url 'pages:a_propos' %}">À propos</a>
+                <a href="{% url 'pages:contact' %}">Contact</a>
+                <a href="/admin/" class="nav-cta">Administration</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h4>🏛️ BiblioLearn</h4>
+                <p>Plateforme académique d'excellence pour la gestion, la découverte et la valorisation des ressources pédagogiques et scientifiques de l'ESMA Marrakech.</p>
+                <p style="color: var(--slate-500); font-size: 0.82rem;">Module Développement Web avec Django · 3ème année Génie Informatique</p>
+            </div>
+            <div class="footer-col">
+                <h4>Navigation</h4>
+                <ul class="footer-links">
+                    <li><a href="{% url 'pages:accueil' %}">Accueil</a></li>
+                    <li><a href="{% url 'catalogue:liste' %}">Explorer le Catalogue</a></li>
+                    <li><a href="{% url 'catalogue:categories' %}">Pôles d'enseignement</a></li>
+                    <li><a href="{% url 'catalogue:auteurs' %}">Auteurs & Chercheurs</a></li>
+                    <li><a href="{% url 'pages:contact' %}">Nous contacter</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Portail</h4>
+                <ul class="footer-links">
+                    <li><a href="/admin/">Espace Administration</a></li>
+                    <li><a href="{% url 'pages:a_propos' %}">Équipe & Mission</a></li>
+                    <li><a href="https://github.com" target="_blank" rel="noopener">Dépôt GitHub du Projet</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026-2027 ESMA Marrakech · Tous droits réservés.</span>
+            <span>Conçu avec passion par l'équipe BiblioLearn</span>
+        </div>
+    </footer>
 </body>
 </html>

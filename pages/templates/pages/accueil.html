@@ -1,41 +1,230 @@
 {% extends "base.html" %}
-{% block title %}Accueil - BiblioLearn
-<h3>Dernières parutions</h3>
-<ul>
-{% for r in dernieres_parutions %}
-<li>
-    <a href="{% url 'catalogue:detail' r.pk %}">{{ r.titre }}</a> ({{ r.annee }})
-</li>
-{% empty %}
-<li>Aucune parution récente.</li>
-{% endfor %}
-</ul>
-{% endblock %}
+
+{% block title %}Accueil - BiblioLearn{% endblock %}
+
 {% block content %}
-<h2>Bienvenue sur {{ nom_projet }}</h2>
-<p>Plateforme de bibliothèque et de mini-cours en ligne.</p>
+<!-- =======================================================================
+     HERO SECTION (LUXURIOUS & MASSIVE)
+     ======================================================================= -->
+<section class="hero-luxury">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span>Bibliothèque Universitaire · ESMA Marrakech</span>
+        </div>
 
-{% if nb_ressources == 0 %}
-<p>Le catalogue est vide pour le moment</p>
-{% else %}
-<p>Le catalogue contient {{ nb_ressources }} ressources</p>
-{% endif %}
+        <h1 class="hero-title">
+            Bienvenue sur <span class="hero-title-gradient">{{ nom_projet }}</span><br>
+            L'Excellence du Savoir Académique
+        </h1>
 
-<h3>Nos modules</h3>
-<ul>
-{% for module in modules %}
-<li>{{ module }}</li>
-{% endfor %}
-</ul>
+        <p class="hero-lead">
+            Plateforme de bibliothèque et de mini-cours en ligne. Accédez instantanément aux ouvrages de référence, articles de recherche et supports pédagogiques certifiés.
+        </p>
 
-<h3>Dernières parutions</h3>
-<ul>
-{% for r in dernieres_parutions %}
-<li>
-    <a href="{% url 'catalogue:detail' r.pk %}">{{ r.titre }}</a> ({{ r.annee }})
-</li>
-{% empty %}
-<li>Aucune parution récente.</li>
-{% endfor %}
-</ul>
+        <!-- Fast Search in Hero -->
+        <div class="hero-search-wrapper">
+            <form action="{% url 'catalogue:liste' %}" method="get" class="hero-search-form">
+                <input type="text" name="q" class="hero-search-input" placeholder="Rechercher par titre d'ouvrage, mot-clé ou nom d'auteur...">
+                <button type="submit" class="hero-search-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    Rechercher
+                </button>
+            </form>
+        </div>
+
+        <!-- Metric Counter Grid -->
+        <div class="hero-stats-grid">
+            <div class="stat-luxury-card">
+                <div class="stat-value"><span>{{ nb_ressources }}</span></div>
+                <div class="stat-label">
+                    {% if nb_ressources == 0 %}
+                    Catalogue vide
+                    {% else %}
+                    Ressources en catalogue
+                    {% endif %}
+                </div>
+            </div>
+            <div class="stat-luxury-card">
+                <div class="stat-value"><span>{{ nb_categories|default:"3" }}</span></div>
+                <div class="stat-label">Disciplines Clés</div>
+            </div>
+            <div class="stat-luxury-card">
+                <div class="stat-value"><span>{{ nb_auteurs|default:"5" }}</span></div>
+                <div class="stat-label">Enseignants & Auteurs</div>
+            </div>
+            <div class="stat-luxury-card">
+                <div class="stat-value"><span>100%</span></div>
+                <div class="stat-label">Consultation Ouverte</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; font-size: 0.95rem;">
+            {% if nb_ressources == 0 %}
+            <p>Le catalogue est vide pour le moment</p>
+            {% else %}
+            <p>Le catalogue contient {{ nb_ressources }} ressources</p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <!-- ===================================================================
+         SECTION: DERNIÈRES PARUTIONS (RECENT RELEASES)
+         =================================================================== -->
+    <section class="section-wrapper">
+        <div class="section-header">
+            <span class="section-pill">Actualités de la bibliothèque</span>
+            <h2 class="section-title">Dernières parutions</h2>
+            <p class="section-subtitle">Découvrez les acquisitions et publications scientifiques les plus récentes ajoutées au fonds documentaire.</p>
+        </div>
+
+        <div class="releases-grid">
+            {% for r in dernieres_parutions %}
+            <article class="resource-luxury-card">
+                <div class="card-top-meta">
+                    <span class="badge-type">{{ r.get_type_ressource_display }}</span>
+                    <span class="card-year-pill">Année {{ r.annee }}</span>
+                </div>
+
+                <h3 class="card-title">
+                    <a href="{% url 'catalogue:detail' r.pk %}">{{ r.titre }}</a> ({{ r.annee }})
+                </h3>
+
+                <div class="card-authors">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>
+                        {% for a in r.auteurs.all %}
+                            <strong>{{ a }}</strong>{% if not forloop.last %}, {% endif %}
+                        {% empty %}
+                            Auteur non renseigné
+                        {% endfor %}
+                    </span>
+                </div>
+
+                <div class="card-category-tag">
+                    📁 {{ r.categorie.nom }}
+                </div>
+
+                <p class="card-summary">
+                    {{ r.resume|default:"Ressource académique fondamentale disponible pour consultation et étude approfondie."|truncatewords:20 }}
+                </p>
+
+                <div class="card-bottom-actions">
+                    {% if r.disponible %}
+                    <span class="badge badge-ok">● Disponible</span>
+                    {% else %}
+                    <span class="badge badge-ko">● Indisponible</span>
+                    {% endif %}
+
+                    <a href="{% url 'catalogue:detail' r.pk %}" class="btn-card-link">
+                        Consulter la fiche &rarr;
+                    </a>
+                </div>
+            </article>
+            {% empty %}
+            <p style="grid-column: 1 / -1; text-align: center; color: var(--slate-500); padding: 3rem;">
+                Aucune parution récente pour le moment.
+            </p>
+            {% endfor %}
+        </div>
+
+        <div style="text-align: center; margin-top: 2.5rem;">
+            <a href="{% url 'catalogue:liste' %}" class="btn-primary-luxury">
+                <span>Explorer tout le catalogue ({{ nb_ressources }} ressources)</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+        </div>
+    </section>
+
+    <!-- ===================================================================
+         SECTION: NOS PÔLES D'ENSEIGNEMENT (CATEGORIES)
+         =================================================================== -->
+    <section class="section-wrapper" style="padding-top: 1rem;">
+        <div class="section-header">
+            <span class="section-pill">Fonds Documentaires</span>
+            <h2 class="section-title">Pôles d'Excellence</h2>
+            <p class="section-subtitle">Nos ouvrages sont minutieusement indexés selon les cursus d'ingénierie et de formation de l'ESMA.</p>
+        </div>
+
+        <div class="categories-showcase-grid">
+            {% for cat in categories_list %}
+            <div class="category-pillar-card">
+                <div style="font-size: 2rem; margin-bottom: 0.75rem;">
+                    {% if "Informatique" in cat.nom %}💻
+                    {% elif "Mathématiques" in cat.nom %}📐
+                    {% elif "Langues" in cat.nom %}📖
+                    {% else %}📚{% endif %}
+                </div>
+                <h3 class="category-pillar-name">{{ cat.nom }}</h3>
+                <p class="category-pillar-desc">{{ cat.description }}</p>
+                <div>
+                    <a href="{% url 'catalogue:par_categorie' cat.pk %}" class="btn-card-link" style="color: var(--navy-950);">
+                        Consulter les {{ cat.ressources.count }} ouvrages &rarr;
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ===================================================================
+         SECTION: NOS MODULES NUMÉRIQUES
+         ======================================================================= -->
+    <section class="section-wrapper" style="padding-top: 1rem;">
+        <div class="section-header">
+            <span class="section-pill">Écosystème Numérique</span>
+            <h2 class="section-title">Nos modules</h2>
+            <p class="section-subtitle">BiblioLearn s'articule autour d'une architecture modulaire moderne dédiée à l'apprentissage.</p>
+        </div>
+
+        <div class="modules-grid">
+            {% for module in modules %}
+            <div class="module-card">
+                <div class="module-icon-wrap">
+                    {% if forloop.counter == 1 %}
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                    {% elif forloop.counter == 2 %}
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
+                    {% elif forloop.counter == 3 %}
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    {% else %}
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                    {% endif %}
+                </div>
+                <h4 class="module-title">{{ module.nom }}</h4>
+                <p class="module-desc">{{ module.desc }}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span class="module-tag">{{ module.tag }}</span>
+                    <a href="{% url module.lien %}" class="btn-card-link">Accéder &rarr;</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- ===================================================================
+         CTA CALLOUT BANNER
+         =================================================================== -->
+    <div class="cta-banner-luxury">
+        <h3>Une question ou une recherche spécifique ?</h3>
+        <p>L'équipe documentaire de l'ESMA Marrakech est à votre entière disposition pour vous accompagner dans vos travaux de recherche académique.</p>
+        <div class="cta-btn-group">
+            <a href="{% url 'catalogue:liste' %}" class="btn-primary-luxury">Parcourir tout le catalogue</a>
+            <a href="{% url 'pages:contact' %}" class="btn-outline-luxury">Contacter les bibliothécaires</a>
+        </div>
+    </div>
+</div>
 {% endblock %}
