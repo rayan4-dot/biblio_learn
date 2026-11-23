@@ -1,28 +1,43 @@
 {% extends "base.html" %}
 
-{% block title %}{% if categorie %}Catalogue : {{ categorie.nom }}{% else %}Catalogue{% endif %} - BiblioLearn{% endblock %}
+{% block title %}Catalogue - BiblioLearn{% endblock %}
 
 {% block content %}
-<h2>{% if categorie %}Catalogue : {{ categorie.nom }}{% else %}Catalogue{% endif %}</h2>
+<h2>
+{% if categorie %}Catalogue : {{ categorie.nom }}
+{% elif auteur %}Catalogue : {{ auteur }}
+{% else %}Catalogue{% endif %}
+</h2>
 
-<p>
-    <a href="{% url 'catalogue:categories' %}">Parcourir par catégorie</a>
-    {% if categorie %}
-    | <a href="{% url 'catalogue:liste' %}">Voir tout le catalogue</a>
-    {% endif %}
-</p>
+<form method="get" action="{% url 'catalogue:liste' %}" class="filtres">
+    <input type="text" name="q" value="{{ filtres.q }}" placeholder="Titre ou nom d'auteur">
+    <select name="type">
+        <option value="">Tous les types</option>
+        {% for valeur, libelle in types %}
+        <option value="{{ valeur }}" {% if valeur == filtres.type %}selected{% endif %}>{{ libelle }}</option>
+        {% endfor %}
+    </select>
+    <select name="categorie">
+        <option value="">Toutes les catégories</option>
+        {% for c in categories %}
+        <option value="{{ c.pk }}" {% if c.pk|stringformat:"s" == filtres.categorie %}selected{% endif %}>{{ c.nom }}</option>
+        {% endfor %}
+    </select>
+    <label>
+        <input type="checkbox" name="dispo" value="1" {% if filtres.dispo %}checked{% endif %}>
+        Disponibles seulement
+    </label>
+    <button type="submit">Filtrer</button>
+    <a href="{% url 'catalogue:liste' %}">Réinitialiser</a>
+</form>
 
 <p>{{ ressources|length }} ressource(s) trouvée(s).</p>
-
-<form method="get" style="margin-bottom: 1rem;">
-    <input type="text" name="q" value="{{ q }}" placeholder="Rechercher par titre...">
-    <button type="submit">Rechercher</button>
-</form>
 
 <table>
     <thead>
         <tr>
             <th>Titre</th>
+            <th>Auteurs</th>
             <th>Type</th>
             <th>Catégorie</th>
             <th>Année</th>
@@ -33,6 +48,13 @@
         {% for ressource in ressources %}
         <tr>
             <td><a href="{% url 'catalogue:detail' ressource.pk %}">{{ ressource.titre }}</a></td>
+            <td>
+                {% for a in ressource.auteurs.all %}
+                <a href="{% url 'catalogue:par_auteur' a.pk %}">{{ a }}</a>{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                -
+                {% endfor %}
+            </td>
             <td>{{ ressource.get_type_ressource_display }}</td>
             <td>{{ ressource.categorie.nom }}</td>
             <td>{{ ressource.annee|default:"-" }}</td>
@@ -46,7 +68,7 @@
         </tr>
         {% empty %}
         <tr>
-            <td colspan="5">Aucune ressource pour le moment.</td>
+            <td colspan="6">Aucune ressource pour le moment.</td>
         </tr>
         {% endfor %}
     </tbody>
