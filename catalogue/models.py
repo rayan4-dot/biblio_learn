@@ -14,6 +14,20 @@ class Categorie(models.Model):
         return self.nom
 
 
+class Auteur(models.Model):
+    nom = models.CharField("Nom", max_length=100)
+    prenom = models.CharField("Prénom", max_length=100)
+    biographie = models.TextField("Biographie", blank=True)
+
+    class Meta:
+        verbose_name = "auteur"
+        verbose_name_plural = "auteurs"
+        ordering = ["nom", "prenom"]
+
+    def __str__(self):
+        return f"{self.prenom} {self.nom}"
+
+
 class Ressource(models.Model):
     TYPE_CHOIX = [
         ("livre", "Livre"),
@@ -35,6 +49,12 @@ class Ressource(models.Model):
         verbose_name="Catégorie",
         on_delete=models.PROTECT,
         related_name="ressources",
+    )
+    auteurs = models.ManyToManyField(
+        Auteur,
+        verbose_name="Auteurs",
+        related_name="ressources",
+        blank=True,
     )
 
     class Meta:
