@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Catégories - BiblioLearn{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <span class="section-pill">Organisation Thématique</span>
+            <h1 class="page-title">📁 Pôles d'Enseignement & Catégories</h1>
+            <p class="page-subtitle">Accédez directement aux ressources regroupées par grandes filières académiques de l'ESMA Marrakech.</p>
+        </div>
+        <a href="{% url 'catalogue:liste' %}" class="btn-primary-luxury" style="padding: 0.6rem 1.4rem; font-size: 0.88rem;">
+            Tout le catalogue
+        </a>
+    </div>
+
+    <div class="categories-showcase-grid">
+        {% for cat in categories %}
+        <div class="category-pillar-card">
+            <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">
+                {% if "Informatique" in cat.nom %}💻
+                {% elif "Mathématiques" in cat.nom %}📐
+                {% elif "Langues" in cat.nom %}📖
+                {% else %}📚{% endif %}
+            </div>
+            <h3 class="category-pillar-name">
+                <a href="{% url 'catalogue:par_categorie' cat.pk %}" style="color: var(--navy-950);">{{ cat.nom }}</a>
+            </h3>
+            <p class="category-pillar-desc">{{ cat.description|default:"Fonds documentaire et références académiques de ce cursus." }}</p>
+            <div style="margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--slate-100); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 600; color: var(--gold-600); font-size: 0.9rem;">
+                    ({{ cat.ressources.count }} ressources)
+                </span>
+                <a href="{% url 'catalogue:par_categorie' cat.pk %}" class="btn-card-link">
+                    Découvrir &rarr;
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <p style="grid-column: 1 / -1; text-align: center; color: var(--slate-500); padding: 3rem;">
+            Aucune catégorie pour le moment.
+        </p>
+        {% endfor %}
+    </div>
+
+    <div style="margin-top: 2.5rem; text-align: center;">
+        <a href="{% url 'catalogue:liste' %}" style="font-weight: 600; color: var(--slate-600);">
+            &larr; Retour au catalogue complet
+        </a>
+    </div>
+</div>
+{% endblock %}

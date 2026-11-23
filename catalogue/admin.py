@@ -33,3 +33,7 @@ class RessourceAdmin(admin.ModelAdmin):
     @admin.display(description="Auteurs")
     def afficher_auteurs(self, obj):
         return ", ".join(str(a) for a in obj.auteurs.all())
+
+admin.site.site_header = "🏛️ BiblioLearn Administration"
+admin.site.site_title = "BiblioLearn Admin"
+admin.site.index_title = "Supervision du Catalogue & des Ressources Académiques"

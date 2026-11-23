@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Auteurs - BiblioLearn{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <div>
+            <span class="section-pill">Corps Enseignant & Chercheurs</span>
+            <h1 class="page-title">✍️ Enseignants-Chercheurs & Auteurs</h1>
+            <p class="page-subtitle">Découvrez les professeurs, formateurs et auteurs des publications scientifiques et pédagogiques de l'ESMA.</p>
+        </div>
+        <a href="{% url 'catalogue:liste' %}" class="btn-primary-luxury" style="padding: 0.6rem 1.4rem; font-size: 0.88rem;">
+            Tout le catalogue
+        </a>
+    </div>
+
+    <div class="releases-grid">
+        {% for auteur in auteurs %}
+        <div class="resource-luxury-card">
+            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem;">
+                <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, var(--navy-850), var(--primary-600)); color: #ffffff; display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; box-shadow: var(--shadow-sm);">
+                    {{ auteur.prenom|slice:":1" }}{{ auteur.nom|slice:":1" }}
+                </div>
+                <div>
+                    <h3 style="margin: 0; font-size: 1.2rem; color: var(--navy-950);">
+                        <a href="{% url 'catalogue:par_auteur' auteur.pk %}">{{ auteur }}</a>
+                    </h3>
+                    <span style="font-size: 0.82rem; color: var(--gold-600); font-weight: 600;">
+                        ({{ auteur.nb }} ressource{{ auteur.nb|pluralize }})
+                    </span>
+                </div>
+            </div>
+
+            <p style="font-size: 0.92rem; color: var(--slate-500); line-height: 1.55; margin-bottom: 1.5rem; flex: 1;">
+                {{ auteur.biographie|default:"Enseignant et chercheur affilié au corps professoral." }}
+            </p>
+
+            <div style="padding-top: 1rem; border-top: 1px solid var(--slate-100); display: flex; justify-content: space-between; align-items: center;">
+                <span class="badge-type">Publications</span>
+                <a href="{% url 'catalogue:par_auteur' auteur.pk %}" class="btn-card-link">
+                    Consulter les travaux &rarr;
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <p style="grid-column: 1 / -1; text-align: center; color: var(--slate-500); padding: 3rem;">
+            Aucun auteur pour le moment.
+        </p>
+        {% endfor %}
+    </div>
+
+    <div style="margin-top: 2.5rem; text-align: center;">
+        <a href="{% url 'catalogue:liste' %}" style="font-weight: 600; color: var(--slate-600);">
+            &larr; Retour au catalogue
+        </a>
+    </div>
+</div>
+{% endblock %}
